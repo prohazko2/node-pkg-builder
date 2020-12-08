@@ -1,0 +1,14 @@
+FROM alpine:3.12
+
+RUN apk --no-cache add --virtual native-deps \
+  g++ gcc libgcc libstdc++ linux-headers make python2 nodejs nodejs-npm \
+  alpine-sdk libffi-dev openssl-dev build-base wget
+
+RUN wget https://ftp.gnu.org/gnu/gzip/gzip-1.6.tar.gz && \
+    tar zxvf gzip-1.6.tar.gz && \
+    cd gzip-1.6 && ./configure && make && \
+    cp gzexe gzip /bin  
+
+RUN npm install --quiet node-gyp pkg pkg-fetch typescript -g
+
+RUN pkg-fetch -n node12.18.1 -p alpine -a x64
